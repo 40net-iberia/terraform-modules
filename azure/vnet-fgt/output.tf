@@ -35,7 +35,11 @@ output "fgt-active-ni_ids" {
 }
 
 output "fgt-active-ni_names"{
-  value = [azurerm_network_interface.ni-activeport1.name, azurerm_network_interface.ni-activeport2.name, azurerm_network_interface.ni-activeport3.name]
+  value = [
+    azurerm_network_interface.ni-activeport1.name, 
+    azurerm_network_interface.ni-activeport2.name, 
+    azurerm_network_interface.ni-activeport3.name
+  ]
 }
 
 output "fgt-active-ni_ips"{
@@ -55,7 +59,10 @@ output "fgt-passive-ni_ids"{
 }
 
 output "fgt-passive-ni_names"{
-  value = [azurerm_network_interface.ni-passiveport1.name, azurerm_network_interface.ni-passiveport2.name, azurerm_network_interface.ni-passiveport3.name]
+  value = [
+    azurerm_network_interface.ni-passiveport1.name, 
+    azurerm_network_interface.ni-passiveport2.name, 
+    azurerm_network_interface.ni-passiveport3.name]
 }
 
 output "fgt-passive-ni_ips"{

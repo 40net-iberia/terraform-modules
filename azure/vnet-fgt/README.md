@@ -1,7 +1,7 @@
 # Deployment LoadBalancers for a Fortigate Cluster deployment on the Azure with Terraform
 ## Introduction
 
-This module IaC is a part of a full deployment of a Fortigate cluster in a sandwich configuration. This terraform code will deploy spoke VNETs with preconfigured subnets: subnet-1, subnet-2, GatewaySubnet, RouterServer, PrivateLinkSubnet, PrivateLinkServicesSubnet. Network Security Groups and interfaces in subnet-1 y subnet-2 of each VNET are also created, for attached to future test VM deployed in those subnets.
+This module IaC is a part of a full deployment of a Fortigate cluster. This terraform code will deploy all necessary componets of a fortigate cluster. The deplyoment include subnets: mgmt-ha, public and private for fortigate interfaces and aditional subnets for future deployment of a VirtualGateway and Azure Router Server. Network interfaces for fortigates are created and related Network Security Groups. 
 
 ## Requirements
 * [Terraform](https://learn.hashicorp.com/terraform/getting-started/install.html) >= 0.12.0
@@ -9,10 +9,9 @@ This module IaC is a part of a full deployment of a Fortigate cluster in a sandw
 * Terraform Provider Template >= 2.2.0
 * Terraform Provider Random >= 3.1.0
 
-
 ## Deployment overview
 Terraform deploys the following components:
-   - Update vars.tf with CIDR blocks for each VNET you want to deploy
+   - Update vars.tf with CIDR blocks for VNET fortigate. 
 
 ## Deployment considerations:
       - Create file terraform.tfvars using terraform.tfvars.example as template 

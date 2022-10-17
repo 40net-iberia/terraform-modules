@@ -1,4 +1,4 @@
-// Azure resourcers group
+// Resource group name
 variable "resourcegroup_name" {}
 
 // Azure resourcers prefix description added in name
@@ -15,16 +15,15 @@ variable "tags" {
   }
 }
 
+// Region for deployment
+variable "location" {
+  type    = string
+  default = "francecentral"
+}
+
 // CIDR range for VNET Fortigate - Security VNET
 variable "vnet-fgt_cidr" {
   default = "172.30.0.0/20"
-}
-
-// enable accelerate network, either true or false, default is false
-// Make the the instance choosed supports accelerated networking.
-// Check: https://docs.microsoft.com/en-us/azure/virtual-network/accelerated-networking-overview#supported-vm-instances
-variable "accelerate" {
-  default = "false"
 }
 
 // HTTPS Port
@@ -37,6 +36,9 @@ variable "admin_cidr" {
   type    = string
   default = "0.0.0.0/0"
 }
+
+
+
 
 
 

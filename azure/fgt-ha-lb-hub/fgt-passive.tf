@@ -1,21 +1,9 @@
-##############################################################################################################
-# FGT ACTIVE VM
-##############################################################################################################
-
-# Create new random API key to be provisioned in FortiGates.
-resource "random_string" "api_key" {
-  length                 = 30
-  special                = false
-  numeric                = true
-}
-
-# Create and attach the eip to the units
-resource "azurerm_virtual_machine" "fgt-active" {
-  name                         = "${var.prefix}-fgt-active"
+resource "azurerm_virtual_machine" "regiona-fgt-passive" {
+  name                         = "${var.prefix}-fgt-passive"
   location                     = var.location
   resource_group_name          = var.resourcegroup_name
-  network_interface_ids        = var.fgt-active-ni_ids
-  primary_network_interface_id = var.fgt-active-ni_ids[0]
+  network_interface_ids        = var.fgt-passive-ni_ids
+  primary_network_interface_id = var.fgt-passive-ni_ids[0]
   vm_size                      = var.size
 
   lifecycle {
@@ -37,7 +25,7 @@ resource "azurerm_virtual_machine" "fgt-active" {
   }
 
   storage_os_disk {
-    name              = "${var.prefix}-osDisk-fgt-active"
+    name              = "${var.prefix}-osDisk-fgt-passive"
     caching           = "ReadWrite"
     managed_disk_type = "Standard_LRS"
     create_option     = "FromImage"
@@ -45,7 +33,7 @@ resource "azurerm_virtual_machine" "fgt-active" {
 
   # Log data disks
   storage_data_disk {
-    name              = "${var.prefix}-datadisk-fgt-active"
+    name              = "${var.prefix}-datadisk-fgt-passive"
     managed_disk_type = "Standard_LRS"
     create_option     = "Empty"
     lun               = 0
@@ -53,10 +41,10 @@ resource "azurerm_virtual_machine" "fgt-active" {
   }
 
   os_profile {
-    computer_name  = "fgt-active"
+    computer_name  = "fgt-passive"
     admin_username = var.adminusername
     admin_password = var.adminpassword
-    custom_data    = data.template_file.activeFortiGate.rendered
+    custom_data    = data.template_file.passiveFortiGate.rendered
   }
 
   os_profile_linux_config {
@@ -73,27 +61,26 @@ resource "azurerm_virtual_machine" "fgt-active" {
   }
 }
 
-data "template_file" "activeFortiGate" {
+data "template_file" "passiveFortiGate" {
   template = file("${path.module}/fgt.conf")
   vars = {
     type            = var.license_type
-    license_file    = var.license-active
-    fgt_id          = "${var.hub["id"]}-Active"
-    fgt_priority    = 200
+    license_file    = var.license-passive
+    fgt_id          = "${var.hub["id"]}-Passive"
+    fgt_priority    = 100
     api_key         = random_string.api_key.result
-
-    port1_ip        = cidrhost(var.fgt-subnet_cidrs["mgmt"],10)
+    
+    port1_ip        = cidrhost(var.fgt-subnet_cidrs["mgmt"],11)
     port1_mask      = cidrnetmask(var.fgt-subnet_cidrs["mgmt"])
     port1_gw        = cidrhost(var.fgt-subnet_cidrs["mgmt"],1)
-    port2_ip        = cidrhost(var.fgt-subnet_cidrs["public"],10)
+    port2_ip        = cidrhost(var.fgt-subnet_cidrs["public"],11)
     port2_mask      = cidrnetmask(var.fgt-subnet_cidrs["public"])
     port2_gw        = cidrhost(var.fgt-subnet_cidrs["public"],1)
-    port2_name      = var.fgt-active-ni_names[1]
-    port3_ip        = cidrhost(var.fgt-subnet_cidrs["private"],10)
+    port3_ip        = cidrhost(var.fgt-subnet_cidrs["private"],11)
     port3_mask      = cidrnetmask(var.fgt-subnet_cidrs["private"])
     port3_gw        = cidrhost(var.fgt-subnet_cidrs["private"],1)
 
-    peerip          = cidrhost(var.fgt-subnet_cidrs["mgmt"],11)
+    peerip          = cidrhost(var.fgt-subnet_cidrs["mgmt"],10)
     gwlb_ip         = var.gwlb_ip
     
     tenant          = var.tenant_id
@@ -133,7 +120,6 @@ data "template_file" "activeFortiGate" {
     rs-spoke2_bgp-asn         = var.rs-spoke["rs2_bgp-asn"]
 
     spokes-onprem-cidr        = var.spokes-onprem-cidr
-
     advpn-ipsec-psk           = var.advpn-ipsec-psk
   }
 }
