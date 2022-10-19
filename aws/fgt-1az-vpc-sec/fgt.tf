@@ -21,7 +21,7 @@ resource "aws_instance" "fgt" {
   ami                  = data.aws_ami_ids.fgt-ond-amis.ids[1]
   instance_type        = "c5.xlarge"
   availability_zone    = var.region["region_az1"]
-  key_name             = aws_key_pair.fgt-hub-vpc-xs22-kp.key_name
+  key_name             = var.key-pair_name != null ? var.key-pair_name : aws_key_pair.fgt-vpc-hub-kp[0].key_name
   iam_instance_profile = aws_iam_instance_profile.fgt-sdn_profile.name
   user_data            = data.template_file.fgt.rendered
   network_interface {
