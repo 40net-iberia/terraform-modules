@@ -1,0 +1,36 @@
+
+version: '3'
+
+services:
+  db:
+    platform: linux/x86_64
+    image: mysql:5.7
+    container_name: mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: my_secret_pw_shh
+      MYSQL_DATABASE: test_db
+      MYSQL_USER: devuser
+      MYSQL_PASSWORD: devpass
+    ports:
+      - "9906:3306"
+  web:
+    platform: linux/x86_64
+    image: php:8.0.20-apache
+    container_name: php_web
+    depends_on:
+      - db
+    volumes:
+      - ./:/var/www/
+    ports:
+      - "8000:80"
+    stdin_open: true
+    tty: true
+  phpmyadmin:
+    platform: linux/x86_64
+    image: phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    ports:
+      - 8100:80
+    environment:
+      - PMA_ARBITRARY=1
