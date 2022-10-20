@@ -22,7 +22,7 @@ services:
     volumes:
       - ./:/var/www/
     ports:
-      - "8100:80"
+      - "8000:80"
     stdin_open: true
     tty: true
   phpmyadmin:
@@ -31,6 +31,6 @@ services:
     container_name: phpmyadmin
     restart: always
     ports:
-      - 8101:80
+      - 8100:80
     environment:
       - PMA_ARBITRARY=1
