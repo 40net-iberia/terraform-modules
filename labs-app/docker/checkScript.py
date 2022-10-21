@@ -18,11 +18,11 @@ dotenv_path = Path('/var/www/.env')
 load_dotenv(dotenv_path=dotenv_path)
 
 DBRHOST   = os.getenv('DBRHOST')
-DBUSER    = os.getenv('DBUSER')
+DBUSER    = os.getenv('MYSQL_USER')
 DBNAME    = os.getenv('DBNAME')
 DBTABLE   = os.getenv('DBTABLE')
 DBPORT    = os.getenv('DBPORT')
-DBPASS    = os.getenv('DBPASS')
+DBPASS    = os.getenv('MYSQL_PASSWORD')
 
 #######################################
 # Connect to DataBase
