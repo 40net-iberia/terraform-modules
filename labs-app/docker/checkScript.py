@@ -40,14 +40,16 @@ except mysql.connector.Error as e:
 
 ##########################################
 # Update DB: inster students if exits file
-
-#if os.path.exists('insert-students.sql') : 
-#  try:
-#    with open('insert-students.sql', 'r') as f:
-#      mycursor.execute(f.read(), multi=True)
-#      mydb.commit()
-#  except mysql.connector.Error as e:
-#    print("Error DB: {}".format(e))
+# (comment for testing)
+"""
+if os.path.exists('insert-students.sql') : 
+  try:
+    with open('insert-students.sql', 'r') as f:
+      mycursor.execute(f.read(), multi=True)
+     mydb.commit()
+  except mysql.connector.Error as e:
+    print("Error DB: {}".format(e))
+"""
 
 #######################################
 # Read list of student Servers
