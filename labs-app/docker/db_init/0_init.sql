@@ -17,7 +17,3 @@ CREATE TABLE `students` (
   `server_check` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
   PRIMARY KEY (user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
-
-INSERT INTO `students` (`user_id`, `user_sort`, `server_ip`, `email`, `access_key`, `secret_key`, `external_id`, `server_test`) VALUES
-('user-test', 'user-test', '127.0.0.1', 'test@local.local', 'xxxx-xxx', 'xxxx-xxx', 'xxxx-xxx', '0','timestamp');
-COMMIT;

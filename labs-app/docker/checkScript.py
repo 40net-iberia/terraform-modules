@@ -14,15 +14,15 @@ from pathlib import Path
 #######################################
 # Read variables to connect DataBase
 
-dotenv_path = Path('/var/www/.env')
+dotenv_path = Path('./.env')
 load_dotenv(dotenv_path=dotenv_path)
 
 DBRHOST   = os.getenv('DBRHOST')
-DBUSER    = os.getenv('MYSQL_USER')
+DBUSER    = os.getenv('DBUSER')
 DBNAME    = os.getenv('DBNAME')
 DBTABLE   = os.getenv('DBTABLE')
 DBPORT    = os.getenv('DBPORT')
-DBPASS    = os.getenv('MYSQL_PASSWORD')
+DBPASS    = os.getenv('DBPASS')
 
 #######################################
 # Connect to DataBase
@@ -38,24 +38,24 @@ try:
 except mysql.connector.Error as e:
   print("Error DB: {}".format(e))
 
-#######################################
-# Create DB if not exit
+##########################################
+# Update DB: inster students if exits file
 
-try:
-  with open('create-student-db.sql', 'r') as f:
-    mycursor.execute(f.read(), multi=True)
-    mydb.commit()
-except mysql.connector.Error as e:
-  print("Error DB: {}".format(e))
+#if os.path.exists('insert-students.sql') : 
+#  try:
+#    with open('insert-students.sql', 'r') as f:
+#      mycursor.execute(f.read(), multi=True)
+#      mydb.commit()
+#  except mysql.connector.Error as e:
+#    print("Error DB: {}".format(e))
 
 #######################################
 # Read list of student Servers
 
-sql = "SELECT server_ip FROM student"
-
+sql = "SELECT server_ip FROM "+ DBTABLE
 try:
-  mycursor.execute(sql)
   server_list  = mycursor.fetchall()
+  mycursor.execute(sql)
 except mysql.connector.Error as e:
   print("Error DB: {}".format(e))
 
@@ -78,8 +78,8 @@ while True:
 
       localtime = time.localtime()
       timestamp = time.strftime("%I:%M:%S %p", localtime)
-      sql_timestamp = "UPDATE student SET server_check='"+ timestamp +"' WHERE server_ip ='" + server_ip[0] + "'"
-      sql_check = "UPDATE student SET server_test='"+ test_result +"' WHERE server_ip ='" + server_ip[0] + "'"
+      sql_timestamp = "UPDATE "+ DBTABLE + " SET server_check='"+ timestamp +"' WHERE server_ip ='" + server_ip[0] + "'"
+      sql_check = "UPDATE " + DBTABLE + " SET server_test='"+ test_result +"' WHERE server_ip ='" + server_ip[0] + "'"
 
      # print (timestamp, " result code: " + str(webUrl.getcode()))     
       print ("updating DB")
