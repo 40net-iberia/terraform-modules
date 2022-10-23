@@ -12,7 +12,11 @@ CREATE TABLE `students` (
   `email` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
   `access_key` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
   `secret_key` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `external_id` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `externalid_token` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `accountid` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `region` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `region_az1` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `vpc_cidr` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
   `server_test` tinyint(1) DEFAULT '0',
   `server_check` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
   PRIMARY KEY (user_id)
