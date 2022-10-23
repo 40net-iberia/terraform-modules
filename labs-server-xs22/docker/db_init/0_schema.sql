@@ -12,6 +12,7 @@ CREATE TABLE `students` (
   `email` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
   `access_key` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
   `secret_key` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `user_password` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
   `externalid_token` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
   `accountid` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
   `region` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
@@ -19,5 +20,6 @@ CREATE TABLE `students` (
   `vpc_cidr` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
   `server_test` tinyint(1) DEFAULT '0',
   `server_check` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `cloud9_url` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
   PRIMARY KEY (user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;

@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $exit = "Error: connecting DB: ". mysqli_connect_error();
             } else {
                 $exit = "User not found";
-                $sql = "SELECT `user_id`,`user_sort`,`region`,`region_az1`,`accountid`,`access_key`,`secret_key`,`vpc_cidr`,`externalid_token` FROM " . $table ." WHERE email='".$email."'"; 
+                $sql = "SELECT * FROM " . $table ." WHERE email='".$email."'"; 
                 if ($result = mysqli_query($con,$sql)) {
                     while($row = mysqli_fetch_array($result))
                     {
@@ -38,11 +38,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $exit .= '  Owner=' . $row['user_id'] . '<br>';
                         $exit .= '  Name=' . $row['user_sort'] . '<br>';
                         $exit .= '<br> region <br>';
-                        $exit .= '  region=' . $row['region']. '<br>';
-                        $exit .= '  region_az1=' . $row['region_az1']. '<br>';
+                        $exit .= '  region= ' . $row['region']. '<br>';
+                        $exit .= '  region_az1= ' . $row['region_az1']. '<br>';
                         $exit .= '<br> externalid_token=' . $row['externalid_token'];
                         $exit .= '<br>account_id=' . $row['account_id'];
                         $exit .= '<br> vpc_cidr=' . $row['vpc_cidr'];
+                        $exit .= '<br>';
+                        $exit .= '<br> cloud9_url=' . $row['cloud9_url'] . '<br>';
+                        $exit .= ' user= ' . $row['user_id'] . '<br>';
+                        $exit .= ' password= ' . $row['user_password'] . '<br>';
                         $exit .= '<br>';
                     }
                 }
