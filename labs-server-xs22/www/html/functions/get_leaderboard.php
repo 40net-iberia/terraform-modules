@@ -3,12 +3,6 @@ require("class_DevCoder.inc");
 use DevCoder\DotEnv;
 (new DotEnv('/var/www/.env'))->load();
 
-//$dbhost = getenv('DBHOST');
-//$dbuser = getenv('DBUSER'); 
-//$dbpass = getenv('DBPASS'); 
-//$db = getenv('DBNAME');
-//$table = getenv('DBTABLE');
-
 // Get environment variables
 $dbhost = $_ENV['DBHOST'];
 $dbuser = $_ENV['DBUSER'];
