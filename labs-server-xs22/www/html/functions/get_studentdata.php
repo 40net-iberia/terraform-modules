@@ -1,7 +1,7 @@
 <?php
-//require("class_DevCoder.inc");
-//use DevCoder\DotEnv;
-//(new DotEnv('/var/www/.env'))->load();
+require("class_DevCoder.inc");
+use DevCoder\DotEnv;
+(new DotEnv('/var/www/.env'))->load();
 
 // define variables and set to empty values
 $email = $exit = "";
