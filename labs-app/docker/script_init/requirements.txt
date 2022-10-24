@@ -1,4 +1,0 @@
-urllib3
-python-dotenv
-pathlib
-mysql.connector
