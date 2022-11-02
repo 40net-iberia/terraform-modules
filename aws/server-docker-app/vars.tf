@@ -8,7 +8,7 @@ variable "tags" {
   type = map(any)
   default     = {
    Name    = "server-test"
-   Project = "xs22"
+   Project = "project"
   }
 }
 
@@ -35,8 +35,28 @@ variable eni-server {
   }
 }
 
-// PHP APP url 
-variable "app_uri" {
+// APP Docker image
+// - default Apache httpd lastest
+variable "app_docker_image" {
+  type = string
+  default = "httpd:latest"
+}
+ 
+// APP Git repo url 
+variable "app_github_uri" {
   type = string
   default = "uri"
+}
+
+// Path to APP in Git repo 
+// - parten /folder/ default /
+variable "app_github_path" {
+  type = string
+  default = "/"
+}
+
+// PHP APP url 
+variable "vm_size" {
+  type = string
+  default = "t3.small"
 }

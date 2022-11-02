@@ -4,8 +4,8 @@
 
 // Server in subnet Servers
 resource "aws_instance" "server" {
-  ami                    = data.aws_ami.server_ami.id
-  instance_type          = "t2.micro"
+  ami                    = data.aws_ami.server_ami-amazon.id
+  instance_type          = var.vm_size
   key_name               = var.key-pair_name != null ? var.key-pair_name : aws_key_pair.server-kp[0].key_name
   user_data              = data.template_file.data-server_user-data.rendered
   network_interface {
@@ -17,20 +17,18 @@ resource "aws_instance" "server" {
 }
 
 // Retrieve AMI info
-data "aws_ami" "server_ami" {
+data "aws_ami" "server_ami-amazon" {
   most_recent = true
 
   filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*"]
+    name   = "owner-alias"
+    values = ["amazon"]
   }
 
   filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
+    name   = "name"
+    values = ["amzn2-ami-hvm-*-x86_64-ebs"]
   }
-
-  owners = ["099720109477"] # Canonical
 }
 
 // Create user-data for server
@@ -47,3 +45,5 @@ resource "aws_key_pair" "server-kp" {
   key_name   = "${var.tags["Name"]}-server-kp"
   public_key = var.key-pair_rsa-public-key
 }
+
+
