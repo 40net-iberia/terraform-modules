@@ -1,4 +1,7 @@
-variable "resourcegroup_name" {}
+variable "resourcegroup_name" {
+  type    = string
+  default = null
+}
 
 # Azure resourcers prefix description
 variable "prefix" {
@@ -6,10 +9,13 @@ variable "prefix" {
   default = "terraform"
 }
 
-# Azure resourcers prefix description
-variable "tag_env" {
-  type    = string
-  default = "terraform-deploy"
+// Azure resourcers tags
+variable "tags" {
+  type    = map(any)
+  default =  {
+      Deploy = "module-vnet-spoke"
+      Project = "terraform-fortinet"
+  }
 }
 
 variable "location" {
@@ -17,19 +23,14 @@ variable "location" {
   default = "francecentral"
 }
 
-variable "vnet_name" {
-  type    = string
-  default = "spoke-1"
-}
-
-variable "subnet_id" {
-  type    = string
-  default = null
+variable "subnet_ids" {
+  type    = list(string)
+  default = []
 }
 
 variable "fgt_bgp-asn" {
   type    = string
-  default = "65002"
+  default = "65001"
 }
 
 variable "fgt1_peer-ip" {

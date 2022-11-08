@@ -1,22 +1,32 @@
 // Azure resourcers group
-variable "resourcegroup_name" {}
+variable "resourcegroup_name" {
+  type    = string
+  default = null
+}
+
+// Region for deployment
+variable "location" {
+  type    = string
+  default = "francecentral"
+}
 
 // Azure resourcers prefix description added in name
 variable "prefix" {
   type    = string
-  default = "module-vnet-spoke"
+  default = "module-vnet-fgt"
 }
 
 // Azure resourcers tags
 variable "tags" {
   type    = map(any)
   default =  {
-      deploy = "module-vnet-spoke"
+      deploy = "module-vnet-fgt"
   }
 }
 
 // CIDR range for VNET Fortigate - Security VNET
 variable "vnet-fgt_cidr" {
+  type    = string
   default = "172.30.0.0/20"
 }
 

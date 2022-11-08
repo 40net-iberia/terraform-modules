@@ -14,9 +14,10 @@ output "cluster-public-ip_name"{
   value = azurerm_public_ip.cluster-public-ip.name
 }
 
-output "vnet_ids"{
+output "vnet"{
   value = {
-    "vnet-fgt" = azurerm_virtual_network.vnet-fgt.id
+    name  = azurerm_virtual_network.vnet-fgt.name
+    id    = azurerm_virtual_network.vnet-fgt.id
   }   
 }
 
@@ -79,6 +80,7 @@ output "subnet_cidrs"{
     public    = azurerm_subnet.subnet-public.address_prefixes[0]
     private   = azurerm_subnet.subnet-private.address_prefixes[0]
     vgw       = azurerm_subnet.subnet-vgw.address_prefixes[0]
+    rs        = azurerm_subnet.subnet-routeserver.address_prefixes[0]
   }
 }
 
@@ -88,6 +90,7 @@ output "subnet_names"{
     public    = azurerm_subnet.subnet-public.name
     private   = azurerm_subnet.subnet-private.name
     vgw       = azurerm_subnet.subnet-vgw.name
+    rs        = azurerm_subnet.subnet-routeserver.name
   }
 }
 
@@ -97,6 +100,7 @@ output "subnet_ids"{
     public    = azurerm_subnet.subnet-public.id
     private   = azurerm_subnet.subnet-private.id
     vgw       = azurerm_subnet.subnet-vgw.id
+    rs        = azurerm_subnet.subnet-routeserver.id
   }
 }
 

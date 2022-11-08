@@ -1,17 +1,27 @@
+// Azure configuration for Terraform providers
+variable "subscription_id" {}
+variable "client_id" {}
+variable "client_secret" {}
+variable "tenant_id" {}
+
 // Resource group name
-variable "resourcegroup_name" {}
+variable "resourcegroup_name" {
+  type    = string
+  default = null
+}
 
 // Azure resourcers prefix description added in name
 variable "prefix" {
   type    = string
-  default = "module-vnet-spoke"
+  default = "module-vnet-fgt"
 }
 
 // Azure resourcers tags
 variable "tags" {
   type    = map(any)
   default =  {
-      deploy = "module-vnet-spoke"
+      Deploy = "module-vnet-fgt"
+      Project = "terraform-deploy"
   }
 }
 
@@ -19,22 +29,6 @@ variable "tags" {
 variable "location" {
   type    = string
   default = "francecentral"
-}
-
-// CIDR range for VNET Fortigate - Security VNET
-variable "vnet-fgt_cidr" {
-  default = "172.30.0.0/20"
-}
-
-// HTTPS Port
-variable "admin_port" {
-  type    = string
-  default = "8443"
-}
-
-variable "admin_cidr" {
-  type    = string
-  default = "0.0.0.0/0"
 }
 
 

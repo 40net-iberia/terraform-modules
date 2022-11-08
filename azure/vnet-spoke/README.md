@@ -15,9 +15,9 @@ Terraform deploys the following components:
    - Update vars.tf with CIDR blocks for each VNET you want to deploy
 
 ## Deployment considerations:
-      - Create file terraform.tfvars using terraform.tfvars.example as template 
-      - Update variables in var.tf with fortigate cluster deployment
-      - You will be charged for this deployment
+   - Create file terraform.tfvars using terraform.tfvars.example as template 
+   - Update variables in var.tf with fortigate cluster deployment
+   - You will be charged for this deployment
 
 ## Deployment
 To deploy the FortiGate-VM to Azure:

@@ -4,7 +4,7 @@ output "vnet_ids"{
 }
 
 output "vnet_names"{
-  value = module.vnet-spoke.vnet_names  
+  value = module.vnet-spoke.vnet_names
 }
 
 output "vnet_cidrs"{

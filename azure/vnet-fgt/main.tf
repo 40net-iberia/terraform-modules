@@ -8,9 +8,7 @@ resource "azurerm_virtual_network" "vnet-fgt" {
   location            = var.location
   resource_group_name = var.resourcegroup_name
 
-  tags = {
-    environment = var.tag_env
-  }
+  tags = var.tags
 }
 
 resource "azurerm_subnet" "subnet-hamgmt" {
@@ -41,7 +39,7 @@ resource "azurerm_subnet" "subnet-vgw" {
   address_prefixes     = [cidrsubnet(var.vnet-fgt_cidr,5,12)]
 }
 
-resource "azurerm_subnet" "subnet-route-server" {
+resource "azurerm_subnet" "subnet-routeserver" {
   name                 = "RouteServerSubnet"
   resource_group_name  = var.resourcegroup_name
   virtual_network_name = azurerm_virtual_network.vnet-fgt.name
@@ -61,9 +59,7 @@ resource "azurerm_public_ip" "cluster-public-ip" {
   sku                 = "Standard"
   sku_tier            = "Regional"
 
-  tags = {
-    environment = var.tag_env
-  }
+  tags = var.tags
 }
 
 resource "azurerm_public_ip" "active-mgmt-ip" {
@@ -74,9 +70,7 @@ resource "azurerm_public_ip" "active-mgmt-ip" {
   sku                 = "Standard"
   sku_tier            = "Regional"
 
-  tags = {
-    environment = var.tag_env
-  }
+  tags = var.tags
 }
 
 resource "azurerm_public_ip" "passive-mgmt-ip" {
@@ -87,9 +81,7 @@ resource "azurerm_public_ip" "passive-mgmt-ip" {
   sku                 = "Standard"
   sku_tier            = "Regional"
 
-  tags = {
-    environment = var.tag_env
-  }
+  tags = var.tags
 }
 
 // Active FGT Network Interface port1
@@ -108,9 +100,7 @@ resource "azurerm_network_interface" "ni-activeport1" {
     public_ip_address_id          = azurerm_public_ip.active-mgmt-ip.id
   }
 
-  tags = {
-    environment = var.tag_env
-  }
+  tags = var.tags
 }
 
 resource "azurerm_network_interface" "ni-activeport2" {
@@ -128,9 +118,7 @@ resource "azurerm_network_interface" "ni-activeport2" {
     public_ip_address_id          = azurerm_public_ip.cluster-public-ip.id
   }
 
-  tags = {
-    environment = var.tag_env
-  }
+  tags = var.tags
 }
 
 resource "azurerm_network_interface" "ni-activeport3" {
@@ -147,9 +135,7 @@ resource "azurerm_network_interface" "ni-activeport3" {
     private_ip_address            = cidrhost(azurerm_subnet.subnet-private.address_prefixes[0],10)
   }
 
-  tags = {
-    environment = var.tag_env
-  }
+  tags = var.tags
 }
 
 // Passive FGT Network Interface port1
@@ -168,9 +154,7 @@ resource "azurerm_network_interface" "ni-passiveport1" {
     public_ip_address_id          = azurerm_public_ip.passive-mgmt-ip.id
   }
 
-  tags = {
-    environment = var.tag_env
-  }
+  tags = var.tags
 }
 
 resource "azurerm_network_interface" "ni-passiveport2" {
@@ -187,9 +171,7 @@ resource "azurerm_network_interface" "ni-passiveport2" {
     private_ip_address            = cidrhost(azurerm_subnet.subnet-public.address_prefixes[0],11)
   }
 
-  tags = {
-    environment = var.tag_env
-  }
+  tags = var.tags
 }
 
 resource "azurerm_network_interface" "ni-passiveport3" {
@@ -206,7 +188,5 @@ resource "azurerm_network_interface" "ni-passiveport3" {
     private_ip_address            = cidrhost(azurerm_subnet.subnet-private.address_prefixes[0],11)
   }
 
-  tags = {
-    environment = var.tag_env
-  }
+  tags = var.tags
 }

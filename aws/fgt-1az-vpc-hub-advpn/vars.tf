@@ -33,11 +33,11 @@ variable "hub_advpn_psk" {
   default  = "super-secret-eky"
 }
 
-// Details about central HUB (golden VPC)
+// Details about central HUB
 variable "hub_advpn" {
   type = map(any)
   default = {
-    hub_asn       = "65001"          // BGP ASN HUB central (golden VPC)
+    hub_asn       = "65001"          // BGP ASN HUB central
     spoke_asn     = "65011"          // BGP configured in sites
     advpn_net     = "10.10.20.0/24"  // Internal CIDR range for ADVPN tunnels private
   }

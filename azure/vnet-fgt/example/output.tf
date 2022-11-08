@@ -11,15 +11,11 @@ output "cluster-public-ip_ip"{
 }
 
 output "cluster-public-ip_name"{
-  value = module.vnet-fgt.cluster-public-ip.name
+  value = module.vnet-fgt.cluster-public-ip_name
 }
 
-output "vnet_ids"{
-  value = module.vnet-fgt.vnet_ids
-}
-
-output "vnet_names"{
-  value = module.vnet-fgt.vnet_names 
+output "vnet"{
+  value = module.vnet-fgt.vnet
 }
 
 output "fgt-active-ni_ids" {

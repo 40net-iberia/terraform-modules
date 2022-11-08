@@ -4,9 +4,7 @@ resource "azurerm_network_security_group" "nsg-mgmt-ha" {
   location            = var.location
   resource_group_name = var.resourcegroup_name
   
-  tags = {
-    environment = var.tag_env
-  }
+  tags = var.tags
 }
 
 resource "azurerm_network_security_rule" "nsr-ingress-mgmt-ha-sync" {
@@ -71,9 +69,7 @@ resource "azurerm_network_security_group" "nsg-public" {
   location            = var.location
   resource_group_name = var.resourcegroup_name
   
-  tags = {
-    environment = var.tag_env
-  }
+  tags = var.tags
 }
 
 resource "azurerm_network_security_rule" "nsr-ingress-public-tcp" {
@@ -137,9 +133,7 @@ resource "azurerm_network_security_group" "nsg-private" {
   location            = var.location
   resource_group_name = var.resourcegroup_name
 
-  tags = {
-    environment = var.tag_env
-  }
+  tags = var.tags
 }
 
 resource "azurerm_network_security_rule" "nsr-ingress-private-all" {
@@ -168,4 +162,39 @@ resource "azurerm_network_security_rule" "nsr-egress-private-all" {
   destination_address_prefix  = "*"
   resource_group_name         = var.resourcegroup_name
   network_security_group_name = azurerm_network_security_group.nsg-private.name
+}
+
+################################################################################
+# Associate NSG to interfaces
+
+# Connect the security group to the network interfaces FGT active
+resource "azurerm_network_interface_security_group_association" "activeport1nsg" {
+  network_interface_id      = azurerm_network_interface.ni-activeport1.id
+  network_security_group_id = azurerm_network_security_group.nsg-mgmt-ha.id
+}
+
+resource "azurerm_network_interface_security_group_association" "activeport2nsg" {
+  network_interface_id      = azurerm_network_interface.ni-activeport2.id
+  network_security_group_id = azurerm_network_security_group.nsg-public.id
+}
+
+resource "azurerm_network_interface_security_group_association" "activeport3nsg" {
+  network_interface_id      = azurerm_network_interface.ni-activeport3.id
+  network_security_group_id = azurerm_network_security_group.nsg-private.id
+}
+
+# Connect the security group to the network interfaces FGT passive
+resource "azurerm_network_interface_security_group_association" "passiveport1nsg" {
+  network_interface_id      = azurerm_network_interface.ni-passiveport1.id
+  network_security_group_id = azurerm_network_security_group.nsg-mgmt-ha.id
+}
+
+resource "azurerm_network_interface_security_group_association" "passiveport2nsg" {
+  network_interface_id      = azurerm_network_interface.ni-passiveport2.id
+  network_security_group_id = azurerm_network_security_group.nsg-public.id
+}
+
+resource "azurerm_network_interface_security_group_association" "passiveport3nsg" {
+  network_interface_id      = azurerm_network_interface.ni-passiveport3.id
+  network_security_group_id = azurerm_network_security_group.nsg-private.id
 }

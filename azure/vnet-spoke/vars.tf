@@ -1,5 +1,8 @@
 // Resource group name
-variable "resourcegroup_name" {}
+variable "resourcegroup_name"  {
+  type    = string
+  default = null
+}
 
 // Azure resourcers prefix description added in name
 variable "prefix" {
@@ -11,7 +14,8 @@ variable "prefix" {
 variable "tags" {
   type    = map(any)
   default =  {
-      deploy = "module-vnet-spoke"
+      Deploy = "module-vnet-spoke",
+      Project = "fortinet-deploy"
   }
 }
 
@@ -22,6 +26,7 @@ variable "location" {
 }
 
 // List of CIDR ranges for vnets spoke (it will create as much VNET as ranges)
+// (this module will deploy as much VNETs as CIDRS appears)
 variable "vnet-spoke_cidrs" {
   type    = list(string)
   default = [
@@ -30,6 +35,14 @@ variable "vnet-spoke_cidrs" {
   ]
 }
 
+// VNET ID of FGT VNET for peering
+variable "vnet-fgt" {
+  type    = map(any)
+  default = {
+    name = "vnet-fgt",
+    id   = "vnet-id"
+  }
+}
 
 
 

@@ -1,7 +1,7 @@
 //  Network Security Group
 
 resource "azurerm_network_security_group" "nsg-hub-spoke" {
-  name                = "${var.prefix}-nsg-hub-spokefgt-vm"
+  name                = "${var.prefix}-nsg-vnet-spoke"
   location            = var.location
   resource_group_name = var.resourcegroup_name
 
@@ -38,22 +38,14 @@ resource "azurerm_network_security_rule" "nsr-hub-egress-spoke" {
 
 
 # Connect the security group to the network interfaces
-resource "azurerm_network_interface_security_group_association" "ni-spoke-1-vm-1-nsg" {
-  network_interface_id      = azurerm_network_interface.ni-spoke-1-vm-1.id
+resource "azurerm_network_interface_security_group_association" "ni_subnet_1-nsg-association" {
+  count                     = length(var.vnet-spoke_cidrs)
+  network_interface_id      = azurerm_network_interface.ni_subnet_1[count.index].id
   network_security_group_id = azurerm_network_security_group.nsg-hub-spoke.id
 }
 
-resource "azurerm_network_interface_security_group_association" "ni-spoke-1-vm-2-nsg" {
-  network_interface_id      = azurerm_network_interface.ni-spoke-1-vm-2.id
-  network_security_group_id = azurerm_network_security_group.nsg-hub-spoke.id
-}
-
-resource "azurerm_network_interface_security_group_association" "ni-spoke-2-vm-1-nsg" {
-  network_interface_id      = azurerm_network_interface.ni-spoke-2-vm-1.id
-  network_security_group_id = azurerm_network_security_group.nsg-hub-spoke.id
-}
-
-resource "azurerm_network_interface_security_group_association" "ni-spoke-2-vm-2-nsg" {
-  network_interface_id      = azurerm_network_interface.ni-spoke-2-vm-2.id
+resource "azurerm_network_interface_security_group_association" "ni_subnet_2-nsg-association" {
+  count                     = length(var.vnet-spoke_cidrs)
+  network_interface_id      = azurerm_network_interface.ni_subnet_2[count.index].id
   network_security_group_id = azurerm_network_security_group.nsg-hub-spoke.id
 }
