@@ -5,7 +5,7 @@
 // (Example with a full scenario deployment with all modules)
 module "fgt-ha" {
   depends_on = [module.xlb, module.vnet-fgt, module.rs]
-  source = "../"
+  source = "github.com/jmvigueras/modules//azure/fgt-ha-xlb-hub-sdwan-vwan"
 
   prefix                    = var.prefix
   location                  = var.location
@@ -58,7 +58,7 @@ module "fgt-ha" {
 // Module create vWAN and vHUB
 module "vwan" {
   depends_on = [module.vnet-spoke-vhub, module.vnet-fgt]
-  source = "../../vwan"
+  source = "github.com/jmvigueras/modules//azure/vwan"
 
   prefix                  = var.prefix
   location                = var.location
@@ -75,7 +75,7 @@ module "vwan" {
 // Module VNET spoke vHUB
 // - This module will generate VNET spoke to connecto to vHUB 
 module "vnet-spoke-vhub" {
-  source      = "../../vnet-spoke"
+  source      = "github.com/jmvigueras/modules//azure/vnet-spoke"
 
   prefix                = "${var.prefix}-vhub"
   location              = var.location
@@ -91,7 +91,7 @@ module "vnet-spoke-vhub" {
 // - Module will peer VNET to VNET FGT
 module "vnet-spoke-fgt" {
   depends_on  = [module.vnet-fgt] 
-  source      = "../../vnet-spoke"
+  source      = "github.com/jmvigueras/modules//azure/vnet-spoke"
 
   prefix                = "${var.prefix}-fgt"
   location              = var.location
@@ -108,7 +108,7 @@ module "vnet-spoke-fgt" {
 // Module VNET for FGT
 // - This module will generate VNET and network intefaces for FGT cluster
 module "vnet-fgt" {
-  source = "../../vnet-fgt"
+  source = "github.com/jmvigueras/modules//azure/vnet-fgt"
 
   prefix                = var.prefix
   location              = var.location
@@ -123,7 +123,7 @@ module "vnet-fgt" {
 // Create load balancers
 module xlb {
   depends_on = [module.vnet-fgt]
-  source = "../../xlb-fgt"
+  source = "github.com/jmvigueras/modules//azure/xlb-fgt"
 
   prefix              = var.prefix
   location            = var.location
@@ -154,7 +154,7 @@ module xlb {
 // Create load balancers
 module rs {
   depends_on = [module.vnet-spoke-fgt, module.vnet-fgt]
-  source = "../../routeserver"
+  source = "github.com/jmvigueras/modules//azure/routeserver"
 
   prefix              = var.prefix
   location            = var.location
@@ -171,7 +171,7 @@ module rs {
 // Create spoke site 1
 module site1 {
   depends_on = [module.fgt-ha]
-  source = "../../site-spoke-to-2hubs"
+  source = "github.com/jmvigueras/modules//azure/site-spoke-to-2hubs"
 
   prefix                    = var.prefix
   location                  = var.location
@@ -210,7 +210,7 @@ module site1 {
 
 // Create virtual machines
 module vms {
-  source = "../../vm"
+  source = "github.com/jmvigueras/modules//azure/vm"
 
   prefix                    = var.prefix
   location                  = var.location
