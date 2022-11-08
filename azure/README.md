@@ -1,7 +1,7 @@
 # List of modules for Azure deployments
 ## Introduction
 
-This is a collection of modules for Azure deployments. You can find an example of how to used each module example folder. 
+This is a collection of modules for Azure deployments. You can find an example of how to use each module in example folder. 
 
 ## Requirements
 * [Terraform](https://learn.hashicorp.com/terraform/getting-started/install.html) >= 0.12.0
