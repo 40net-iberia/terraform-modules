@@ -36,7 +36,7 @@ module "fgt-ha" {
   ]
   gwlb_ip               = module.xlb.gwlb_ip
   rs_peers              = module.rs.rs_peers
-  vhub_peer             = module.vwan.virtual_router_ips
+  vhub_peer             = null
   rs_bgp-asn            = module.rs.rs_bgp-asn
   spoke_bgp-asn         = var.spoke_bgp-asn
   spoke_cidr_vnet       = "172.16.0.0/12"    // Complete CIDR range VNETs in Azure
@@ -46,44 +46,11 @@ module "fgt-ha" {
 
 ###########################################################################
 # Deploy complete architecture with other modules used as input in module
-# - module vwan
 # - module vnet-fgt
 # - module vnet-spoke
-# - module site-spoke-to-2hubs
 # - module xlb-fgt
 # - module rs
 ############################################################################
-
-// Module create vWAN and vHUB
-module "vwan" {
-  depends_on = [module.vnet-spoke-vhub, module.vnet-fgt]
-  source = "github.com/jmvigueras/modules//azure/vwan"
-
-  prefix                  = var.prefix
-  location                = var.location
-  resourcegroup_name      = var.resourcegroup_name == null ? azurerm_resource_group.rg[0].name : var.resourcegroup_name
-  tags                    = var.tags
-
-  vnet_connection         = module.vnet-spoke-vhub.vnet_ids
-  vnet-fgt_id             = module.vnet-fgt.vnet["id"]
-  fgt-cluster_active-ip   = module.vnet-fgt.fgt-active-ni_ips["port3"]
-  fgt-cluster_passive-ip  = module.vnet-fgt.fgt-passive-ni_ips["port3"]
-  fgt-cluster_bgp-asn     = var.hub["bgp-asn"]
-}
-
-// Module VNET spoke vHUB
-// - This module will generate VNET spoke to connecto to vHUB 
-module "vnet-spoke-vhub" {
-  source      = "github.com/jmvigueras/modules//azure/vnet-spoke"
-
-  prefix                = "${var.prefix}-vhub"
-  location              = var.location
-  resourcegroup_name    = var.resourcegroup_name == null ? azurerm_resource_group.rg[0].name : var.resourcegroup_name
-  tags                  = var.tags
-
-  vnet-spoke_cidrs      = ["172.30.18.0/23"]
-  vnet-fgt              = null
-}
 
 // Module VNET spoke VNET FGT
 // - This module will generate VNET spoke to connecto to VNET FGT
@@ -166,47 +133,6 @@ module rs {
   fgt2_peer-ip = module.vnet-fgt.fgt-passive-ni_ips["port3"]
 }
 
-
-// Create spoke site 1
-module site1 {
-  depends_on = [module.fgt-ha]
-  source = "github.com/jmvigueras/modules//azure/site-spoke-to-2hubs"
-
-  prefix                    = var.prefix
-  location                  = var.location
-  resourcegroup_name        = var.resourcegroup_name == null ? azurerm_resource_group.rg[0].name : var.resourcegroup_name
-  tags                      = var.tags
-  storage-account_endpoint  = var.storage-account_endpoint == null ? azurerm_storage_account.storageaccount[0].primary_blob_endpoint : var.storage-account_endpoint
-
-  subscription_id  = var.subscription_id
-  client_id        = var.client_id
-  client_secret    = var.client_secret
-  tenant_id        = var.tenant_id
-
-  adminusername    = var.adminusername
-  adminpassword    = var.adminpassword
-  admin_port       = var.admin_port
-  admin_cidr       = var.admin_cidr
-  
-  site = {
-    site_id         = "1"
-    bgp-asn         = var.spoke_bgp-asn
-    cidr            = "192.168.0.0/24"
-    advpn-ip1       = cidrhost(var.hub["advpn-net"],10)
-    advpn-ip2       = "10.10.20.10"
-  }
-
-  hub1 = {
-    bgp-asn         = var.hub["bgp-asn"]
-    public-ip1      = module.xlb.elb_public-ip
-    advpn-ip1       = cidrhost(var.hub["advpn-net"],1)
-    hck-srv-ip1     = module.vnet-spoke-fgt.ni_ips["subnet1"][0]
-    hck-srv-ip2     = module.vnet-spoke-fgt.ni_ips["subnet2"][0]
-    cidr            = "172.30.0.0/20"
-    advpn-psk       = module.fgt-ha.advpn-ipsec-psk
-  }
-}
-
 // Create virtual machines
 module vms {
   source = "github.com/jmvigueras/modules//azure/vm"
@@ -221,9 +147,7 @@ module vms {
 
   vm_ni_ids   = [
       module.vnet-spoke-fgt.ni_ids["subnet1"][0],
-      module.vnet-spoke-fgt.ni_ids["subnet2"][0],
-      module.vnet-spoke-vhub.ni_ids["subnet1"][0],
-      module.vnet-spoke-vhub.ni_ids["subnet2"][0]
+      module.vnet-spoke-fgt.ni_ids["subnet2"][0]
    ]
 }
 
